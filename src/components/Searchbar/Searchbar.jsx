@@ -12,13 +12,7 @@ class Searchbar extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-
-        if (this.state.searchImage.trim() === "") {
-            window.alert("Enter a search word");
-        } else {
-            this.props.onSubmit(this.state.searchImage);
-        }
-
+        this.props.onSubmit(this.state.searchImage);
         this.setState({ searchImage: "" });
         e.target.reset();
     };

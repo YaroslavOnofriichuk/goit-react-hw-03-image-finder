@@ -4,7 +4,6 @@ import checkEmptyObject from "./services/checkEmptyObject";
 import isButtonCheck from "./services/checkHits";
 import Searchbar from "./components/Searchbar/Searchbar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
-import ImageGalleryItem from "./components/ImageGalleryItem/ImageGalleryItem";
 import Button from "./components/Button/Button";
 import Loader from "./components/Loader/Loader";
 import Modal from "./components/Modal/Modal";
@@ -20,9 +19,11 @@ class App extends Component {
   };
 
   handleSubmit = (searchImage) => {
-    this.setState({isLoading: true});
-
-    getImages(searchImage, 1)
+    if (searchImage.trim() === "") {
+      window.alert("Enter a search word");
+    } else {
+      this.setState({isLoading: true});
+      getImages(searchImage, 1)
       .then(data => {
         this.setState({ 
           searchImage: searchImage,
@@ -31,6 +32,7 @@ class App extends Component {
         });})
       .catch(error => console.log(error))
       .finally(() => this.setState({isLoading: false}));
+    };
   };
 
 
@@ -67,11 +69,7 @@ class App extends Component {
     return (
       <>
         <Searchbar onSubmit={this.handleSubmit}/>
-        {isImages && 
-        <ImageGallery >
-          <ImageGalleryItem images={images} onClick={this.openModal}/> 
-        </ImageGallery>
-         }
+        {isImages && <ImageGallery images={images} onClick={this.openModal}/>}
         {isLoading && <Loader />}
         {renderButton && <Button onClick={this.onLoadMoreClick}/>}
         {largeImage && <Modal largeImageSrc={largeImage} closeModal={this.closeModal}/>}
